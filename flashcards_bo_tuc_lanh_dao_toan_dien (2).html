@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards Phát Triển Lãnh Đạo Cao Cấp</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #f5f9fa 0%, #eef5f7 100%);
+            --primary-color: #0F8A9D;
+            --primary-dark: #0B6B7A;
+            --primary-light: #e6f4f6;
+            --text-dark: #2C3E50;
+            --text-muted: #7F8C8D;
+            --card-bg: #FFFFFF;
+            --shadow: 0 15px 35px rgba(15, 138, 157, 0.12);
+            --accent-orange: #E67E22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 15px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 5px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* Container cho Flashcard */
+        .card-container {
+            width: 100%;
+            max-width: 440px;
+            height: 560px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 15px auto;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            border-radius: 24px;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            background: var(--card-bg);
+            border: 1px solid rgba(15, 138, 157, 0.08);
+        }
+
+        /* Mặt trước */
+        .card-front {
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-index {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            background: var(--primary-light);
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+
+        .card-icon-wrapper {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, var(--primary-light), #ccecf0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.8rem;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 8px rgba(15, 138, 157, 0.1);
+        }
+
+        .question-text {
+            font-size: 1.35rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--text-dark);
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+        }
+
+        .tap-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            animation: pulse 2s infinite;
+            margin-top: 10px;
+        }
+
+        /* Mặt sau */
+        .card-back {
+            transform: rotateY(180deg);
+            justify-content: space-between;
+            padding: 22px 20px;
+        }
+
+        .back-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed rgba(15, 138, 157, 0.2);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .back-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .back-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 12px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        /* Tối ưu hóa thanh cuộn mượt mà */
+        .back-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .back-content::-webkit-scrollbar-thumb {
+            background-color: rgba(15, 138, 157, 0.2);
+            border-radius: 4px;
+        }
+
+        /* Khối câu trả lời bằng chữ */
+        .answer-section {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--text-dark);
+            background-color: #fcfdfe;
+            border-left: 3px solid var(--accent-orange);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        /* Khối hiển thị hình ảnh minh họa */
+        .image-container {
+            width: 100%;
+            text-align: center;
+            margin: 2px 0;
+        }
+
+        .answer-image {
+            width: 100%;
+            max-height: 190px;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 1px solid rgba(15, 138, 157, 0.12);
+            background: #FAFAFA;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        /* Khối câu hỏi chiêm nghiệm */
+        .reflection-section {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 14px;
+            border-radius: 0 14px 14px 0;
+            margin-top: auto; /* Đẩy xuống đáy khối content để cân đối */
+        }
+
+        .reflection-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .reflection-text {
+            font-size: 0.88rem;
+            font-style: italic;
+            line-height: 1.4;
+            color: #1A4F57;
+        }
+
+        /* Thanh trạng thái và nút bấm bên dưới */
+        .controls-wrapper {
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: rgba(15, 138, 157, 0.12);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 10%;
+            transition: width 0.3s ease;
+        }
+
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background-color: rgba(15, 138, 157, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background-color: var(--primary-color);
+            transform: scale(1.25);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            gap: 40px;
+            margin-top: 2px;
+        }
+
+        .btn-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(15, 138, 157, 0.08);
+        }
+
+        .btn-circle:hover:not(:disabled) {
+            background-color: var(--primary-color);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .btn-circle:disabled {
+            border-color: #BDC3C7;
+            color: #BDC3C7;
+            background-color: #ECF0F1;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .current-indicator {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Responsive cho thiết bị di động màn hình nhỏ */
+        @media (max-width: 440px) {
+            body {
+                padding: 14px 10px;
+            }
+            .card-container {
+                height: 520px;
+                margin: 10px auto;
+            }
+            .card-face {
+                padding: 20px 16px;
+            }
+            .question-text {
+                font-size: 1.2rem;
+            }
+            .answer-image {
+                max-height: 160px;
+            }
+            .reflection-text {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Ôn Tập Phát Triển Lãnh Đạo</h1>
+        <p>Bấm vào thẻ để chuyển đổi qua lại giữa câu hỏi & đáp án hoàn chỉnh</p>
+    </header>
+
+    <!-- Khung hiển thị Flashcard -->
+    <div class="card-container" id="cardContainer" onclick="flipCard()">
+        <div class="flashcard" id="flashcard">
+            <!-- Mặt trước: Câu hỏi -->
+            <div class="card-face card-front">
+                <span class="card-index" id="cardIndex">Câu 1 / 10</span>
+                <div class="card-icon-wrapper" id="cardIcon">🎯</div>
+                <div class="question-text" id="questionText">Đang tải nội dung câu hỏi...</div>
+                <div class="tap-hint">
+                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle;">
+                        <path d="M11.5 2a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM9.05 3a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM4.5 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM13.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-11 2.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm11.5 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM7.5 15a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                    </svg>
+                    Chạm để lật mặt sau
+                </div>
+            </div>
+
+            <!-- Mặt sau: Gồm Đáp án văn bản + Hình ảnh minh họa + Câu hỏi chiêm nghiệm -->
+            <div class="card-face card-back">
+                <div class="back-header">
+                    <span class="back-title">Nội dung đáp án hoàn chỉnh</span>
+                    <span class="card-index" id="cardIndexBack">Câu 1 / 10</span>
+                </div>
+                <div class="back-content">
+                    <!-- Khối chữ câu trả lời -->
+                    <div class="answer-section" id="answerText">Đang tải văn bản đáp án...</div>
+                    
+                    <!-- Khối hình ảnh đính kèm -->
+                    <div class="image-container" id="imageContainer"></div>
+                    
+                    <!-- Khối câu hỏi chiêm nghiệm dưới đáy -->
+                    <div class="reflection-section" id="reflectionBlock">
+                        <span class="reflection-label">💡 Câu hỏi chiêm nghiệm / Châm ngôn</span>
+                        <p class="reflection-text" id="reflectionText">Đang tải câu hỏi chiêm nghiệm...</p>
+                    </div>
+                </div>
+                <div class="tap-hint" style="justify-content: center; width: 100%; margin-top: 8px;">
+                    Chạm để lật về mặt câu hỏi
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thanh tiến độ & Các nút bấm điều khiển -->
+    <div class="controls-wrapper">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="dots-container" id="dotsContainer"></div>
+
+        <div class="nav-buttons">
+            <button class="btn-circle" id="prevBtn" onclick="prevCard(event)" disabled>&lsaquo;</button>
+            <span class="current-indicator" id="currentIndicator">1/10</span>
+            <button class="btn-circle" id="nextBtn" onclick="nextCard(event)">&rsaquo;</button>
+        </div>
+    </div>
+
+    <script>
+        // Inject dữ liệu 10 câu hỏi hoàn chỉnh gồm cả Text và link Image tương ứng
+        const flashcards = [{"id": "Câu 1", "question": "Lãnh đạo được định nghĩa ngắn gọn qua 3 từ khoá nào?", "text_answer": "Lãnh đạo = Trách nhiệm + Ảnh hưởng + Mục tiêu.", "image_url": "Câu 1.png", "reflection": "Điều gì tạo động lực cho bạn khi dẫn dắt bản thân và người khác?", "icon": "🎯"}, {"id": "Câu 2", "question": "Nêu tên 5 Giai đoạn Phát triển Lãnh đạo", "text_answer": "Vị kỷ &rarr; Phản ứng &rarr; Sáng tạo &rarr; Tích hợp &rarr; Nhất thể.", "image_url": "Câu 2.png", "reflection": "\"Hành trình phát triển lãnh đạo là hành trình mở rộng Tâm lượng và Tầm nhìn.\"", "icon": "📈"}, {"id": "Câu 3", "question": "Cách tư duy của Lãnh đạo Phản ứng là như thế nào?", "text_answer": "Xuất phát từ nỗi sợ và áp lực từ bên ngoài, tập trung vào việc bảo vệ an toàn, giảm thiểu rủi ro và đối phó tình huống.", "image_url": "Câu 3.png", "reflection": "Khi đối diện với áp lực, nỗi sợ, bạn thường có xu hướng phản ứng như thế nào?", "icon": "⚡"}, {"id": "Câu 4", "question": "Cách tư duy của Lãnh đạo Sáng tạo là như thế nào?", "text_answer": "Xuất phát từ các giá trị cốt lõi sâu sắc bên trong, tập trung vào tầm nhìn dài hạn, kiến tạo giá trị mới và nâng tầm tổ chức.", "image_url": "Câu 4.png", "reflection": "Bạn mong muốn đóng góp/ tạo ra giá trị gì cho tổ chức và cộng đồng?", "icon": "💡"}, {"id": "Câu 5", "question": "Một người lãnh đạo cần quan tâm đến những phương diện nào?", "text_answer": "Ba khía cạnh chính: Tôi hiện diện thế nào (Bản thân) - Tôi kết nối ra sao (Mối quan hệ) - Tôi đạt mục tiêu bằng cách nào (Công việc).", "image_url": "Câu 5.jpg", "reflection": "“Lãnh đạo không chỉ là đạt mục tiêu, mà là hiện diện vững vàng và kết nối để nâng tầm người khác.”", "icon": "🌐"}, {"id": "Câu 6", "question": "Điều gì sẽ xảy ra khi cái tôi (Tự ngã) dần lùi lại phía sau?", "text_answer": "Khi Tự ngã giảm dần, Tâm lượng (sự bao dung, thấu hiểu) và Tầm nhìn sẽ được mở rộng một cách tự nhiên tương ứng.", "image_url": "Câu 6.png", "reflection": "\"Phá trừ cái tôi để phụng sự toàn thể với tình thương và trí tuệ chân thật.\"", "icon": "🧘"}, {"id": "Câu 7", "question": "Điều gì mang lại ý nghĩa và định hướng cho cách bạn sống và dẫn dắt?", "text_answer": "Mục đích sống chân thật từ bên trong. Đó là kim chỉ nam tối thượng giúp bạn vượt qua mọi nỗi sợ để vươn tới giá trị cao đẹp.", "image_url": "Câu 7.jpeg", "reflection": "\"He who has a why to live for can bear almost any how\" – Friedrich Nietzsche.", "icon": "🧭"}, {"id": "Câu 8", "question": "Mục đích của bạn đến từ giá trị bên trong hay kỳ vọng bên ngoài?", "answer_label": "Phân biệt động lực:", "text_answer": "Giai đoạn Phản ứng xuất phát từ nỗi sợ và kỳ vọng bên ngoài; giai đoạn Sáng tạo phát xuất từ giá trị sâu sắc bên trong để tạo tác động lâu dài.", "image_url": "Câu 8.jpg", "reflection": "\"Tôi sống để người mù có cơ hội tiếp cận tri thức\" – Nguyễn Hướng Dương.", "icon": "🌱"}, {"id": "Câu 9", "question": "Bạn có dũng cảm nhìn vào những \"mảnh ghép\" chưa hoàn hảo của mình?", "text_answer": "Chấp nhận mình là một thực thể bất toàn, dũng cảm trung thực nhìn nhận cả ưu và khuyết điểm để bắt đầu sự chuyển hóa thực sự.", "image_url": "Câu 9.jpg", "reflection": "\"Khi tôi chấp nhận chính mình, tôi được giải thoát khỏi gánh nặng của việc cần bạn chấp nhận tôi\" – Steve Maraboli.", "icon": "🧩"}, {"id": "Câu 10", "question": "Bạn có dám nói điều cần nói ngay cả khi nó không hề dễ dàng?", "text_answer": "Dũng cảm sống thật bằng việc: Thấy và biết điều đúng + Dám hành động dấn thân + Thực hiện một cách có trách nhiệm.", "image_url": "Câu 10.jpeg", "reflection": "\"Việc được là chính mình trong một thế giới luôn muốn biến bạn thành người khác là thành tựu lớn nhất\" – Ralph Waldo Emerson.", "icon": "🗣️"}];
+
+        let currentIndex = 0;
+
+        // Lấy các phần tử DOM cần thiết
+        const flashcardEl = document.getElementById('flashcard');
+        const questionTextEl = document.getElementById('questionText');
+        const answerTextEl = document.getElementById('answerText');
+        const imageContainerEl = document.getElementById('imageContainer');
+        const reflectionTextEl = document.getElementById('reflectionText');
+        const reflectionBlock = document.getElementById('reflectionBlock');
+        const cardIndexEl = document.getElementById('cardIndex');
+        const cardIndexBackEl = document.getElementById('cardIndexBack');
+        const cardIconEl = document.getElementById('cardIcon');
+        const progressBarEl = document.getElementById('progressBar');
+        const dotsContainerEl = document.getElementById('dotsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentIndicator = document.getElementById('currentIndicator');
+
+        // Hàm khởi tạo dãy chấm tròn nhỏ chỉ vị trí
+        function initDots() {
+            dotsContainerEl.innerHTML = '';
+            flashcards.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = `dot ${index === currentIndex ? 'active' : ''}`;
+                dot.onclick = (e) => {
+                    e.stopPropagation(); // Không làm kích hoạt lật thẻ
+                    goToCard(index);
+                };
+                dotsContainerEl.appendChild(dot);
+            });
+        }
+
+        // Hàm cập nhật toàn bộ thông tin hiển thị lên thẻ Flashcard hiện tại
+        function updateCard() {
+            // Luôn đảm bảo lật về mặt trước (câu hỏi) trước khi chuyển câu mới
+            flashcardEl.classList.remove('flipped');
+            
+            // Đợi hiệu ứng đóng lật nhẹ (nếu đang ở mặt sau) trước khi nạp dữ liệu mới vào
+            setTimeout(() => {
+                const data = flashcards[currentIndex];
+                
+                // 1. Cập nhật mặt trước
+                questionTextEl.textContent = data.question;
+                cardIconEl.textContent = data.icon;
+                
+                // 2. Cập nhật mặt sau - Khối đáp án văn bản
+                answerTextEl.innerHTML = data.text_answer;
+                
+                // 3. Cập nhật mặt sau - Khối hình ảnh tương ứng từng câu
+                if(data.image_url) {
+                    imageContainerEl.style.display = 'block';
+                    imageContainerEl.innerHTML = `<img src="${data.image_url}" class="answer-image" alt="Hình ảnh minh họa đáp án" onerror="this.onerror=null; this.parentNode.style.display='none';">`;
+                } else {
+                    imageContainerEl.style.display = 'none';
+                }
+                
+                // 4. Cập nhật mặt sau - Khối câu hỏi chiêm nghiệm
+                if (!data.reflection || data.reflection.trim() === "") {
+                    reflectionBlock.style.display = 'none';
+                } else {
+                    reflectionBlock.style.display = 'block';
+                    reflectionTextEl.textContent = data.reflection.replace(/^"|"$/g, ''); // Loại bỏ dấu ngoặc kép bọc ngoài thừa nếu có
+                }
+
+                // 5. Cập nhật các chỉ báo số lượng câu, thanh tiến độ
+                const indexStr = `Câu ${currentIndex + 1} / ${flashcards.length}`;
+                cardIndexEl.textContent = indexStr;
+                cardIndexBackEl.textContent = indexStr;
+                currentIndicator.textContent = `${currentIndex + 1}/${flashcards.length}`;
+
+                const progressPercent = ((currentIndex + 1) / flashcards.length) * 100;
+                progressBarEl.style.width = `${progressPercent}%`;
+
+                // 6. Cập nhật trạng thái các nút bấm trước/sau
+                prevBtn.disabled = currentIndex === 0;
+                nextBtn.disabled = currentIndex === flashcards.length - 1;
+
+                // 7. Cập nhật trạng thái Active của các dấu chấm chỉ số
+                const dots = dotsContainerEl.querySelectorAll('.dot');
+                dots.forEach((dot, idx) => {
+                    if (idx === currentIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }, flashcardEl.classList.contains('flipped') ? 220 : 0);
+        }
+
+        // Hàm lật mặt thẻ khi nhấn vào
+        function flipCard() {
+            flashcardEl.classList.toggle('flipped');
+        }
+
+        // Điều hướng sang câu tiếp theo
+        function nextCard(event) {
+            if (event) event.stopPropagation(); // Ngăn hành vi lật thẻ
+            if (currentIndex < flashcards.length - 1) {
+                currentIndex++;
+                updateCard();
+            }
+        }
+
+        // Quay lại câu phía trước
+        function prevCard(event) {
+            if (event) event.stopPropagation(); // Ngăn hành vi lật thẻ
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCard();
+            }
+        }
+
+        // Nhảy đến một câu bất kì khi bấm chọn chấm tròn
+        function goToCard(index) {
+            if (index >= 0 && index < flashcards.length) {
+                currentIndex = index;
+                updateCard();
+            }
+        }
+
+        // Hỗ trợ phím tắt điều hướng nhanh trên bàn phím máy tính
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextCard();
+            } else if (e.key === 'ArrowLeft') {
+                prevCard();
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                flipCard();
+            }
+        });
+
+        // Kích hoạt khởi tạo giao diện lúc ban đầu
+        initDots();
+        updateCard();
+    </script>
+</body>
+</html>
