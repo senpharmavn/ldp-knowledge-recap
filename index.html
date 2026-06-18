@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcards Phát Triển Lãnh Đạo Cao Cấp</title>
+    <title>LDP Knowledge Recap</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #f5f9fa 0%, #eef5f7 100%);
@@ -370,8 +370,8 @@
 <body>
 
     <header>
-        <h1>Ôn Tập Phát Triển Lãnh Đạo</h1>
-        <p>Bấm vào thẻ để chuyển đổi qua lại giữa câu hỏi & đáp án hoàn chỉnh</p>
+        <h1>LDP KNOWLEDGE RECAP</h1>
+        <p>Bấm vào thẻ để chuyển đổi qua lại giữa câu hỏi & thông điệp</p>
     </header>
 
     <!-- Khung hiển thị Flashcard -->
@@ -393,7 +393,7 @@
             <!-- Mặt sau: Gồm Đáp án văn bản + Hình ảnh minh họa + Câu hỏi chiêm nghiệm -->
             <div class="card-face card-back">
                 <div class="back-header">
-                    <span class="back-title">Nội dung đáp án hoàn chỉnh</span>
+                    <span class="back-title">THÔNG ĐIỆP</span>
                     <span class="card-index" id="cardIndexBack">Câu 1 / 10</span>
                 </div>
                 <div class="back-content">
@@ -405,7 +405,6 @@
                     
                     <!-- Khối câu hỏi chiêm nghiệm dưới đáy -->
                     <div class="reflection-section" id="reflectionBlock">
-                        <span class="reflection-label">💡 Câu hỏi chiêm nghiệm / Châm ngôn</span>
                         <p class="reflection-text" id="reflectionText">Đang tải câu hỏi chiêm nghiệm...</p>
                     </div>
                 </div>
@@ -433,7 +432,7 @@
 
     <script>
         // Inject dữ liệu 10 câu hỏi hoàn chỉnh gồm cả Text và link Image tương ứng
-        const flashcards = [{"id": "Câu 1", "question": "Lãnh đạo được định nghĩa ngắn gọn qua 3 từ khoá nào?", "text_answer": "Lãnh đạo = Trách nhiệm + Ảnh hưởng + Mục tiêu.", "image_url": "Câu 1.png", "reflection": "Điều gì tạo động lực cho bạn khi dẫn dắt bản thân và người khác?", "icon": "🎯"}, {"id": "Câu 2", "question": "Nêu tên 5 Giai đoạn Phát triển Lãnh đạo", "text_answer": "Vị kỷ &rarr; Phản ứng &rarr; Sáng tạo &rarr; Tích hợp &rarr; Nhất thể.", "image_url": "Câu 2.png", "reflection": "\"Hành trình phát triển lãnh đạo là hành trình mở rộng Tâm lượng và Tầm nhìn.\"", "icon": "📈"}, {"id": "Câu 3", "question": "Cách tư duy của Lãnh đạo Phản ứng là như thế nào?", "text_answer": "Xuất phát từ nỗi sợ và áp lực từ bên ngoài, tập trung vào việc bảo vệ an toàn, giảm thiểu rủi ro và đối phó tình huống.", "image_url": "Câu 3.png", "reflection": "Khi đối diện với áp lực, nỗi sợ, bạn thường có xu hướng phản ứng như thế nào?", "icon": "⚡"}, {"id": "Câu 4", "question": "Cách tư duy của Lãnh đạo Sáng tạo là như thế nào?", "text_answer": "Xuất phát từ các giá trị cốt lõi sâu sắc bên trong, tập trung vào tầm nhìn dài hạn, kiến tạo giá trị mới và nâng tầm tổ chức.", "image_url": "Câu 4.png", "reflection": "Bạn mong muốn đóng góp/ tạo ra giá trị gì cho tổ chức và cộng đồng?", "icon": "💡"}, {"id": "Câu 5", "question": "Một người lãnh đạo cần quan tâm đến những phương diện nào?", "text_answer": "Ba khía cạnh chính: Tôi hiện diện thế nào (Bản thân) - Tôi kết nối ra sao (Mối quan hệ) - Tôi đạt mục tiêu bằng cách nào (Công việc).", "image_url": "Câu 5.jpg", "reflection": "“Lãnh đạo không chỉ là đạt mục tiêu, mà là hiện diện vững vàng và kết nối để nâng tầm người khác.”", "icon": "🌐"}, {"id": "Câu 6", "question": "Điều gì sẽ xảy ra khi cái tôi (Tự ngã) dần lùi lại phía sau?", "text_answer": "Khi Tự ngã giảm dần, Tâm lượng (sự bao dung, thấu hiểu) và Tầm nhìn sẽ được mở rộng một cách tự nhiên tương ứng.", "image_url": "Câu 6.png", "reflection": "\"Phá trừ cái tôi để phụng sự toàn thể với tình thương và trí tuệ chân thật.\"", "icon": "🧘"}, {"id": "Câu 7", "question": "Điều gì mang lại ý nghĩa và định hướng cho cách bạn sống và dẫn dắt?", "text_answer": "Mục đích sống chân thật từ bên trong. Đó là kim chỉ nam tối thượng giúp bạn vượt qua mọi nỗi sợ để vươn tới giá trị cao đẹp.", "image_url": "Câu 7.jpeg", "reflection": "\"He who has a why to live for can bear almost any how\" – Friedrich Nietzsche.", "icon": "🧭"}, {"id": "Câu 8", "question": "Mục đích của bạn đến từ giá trị bên trong hay kỳ vọng bên ngoài?", "answer_label": "Phân biệt động lực:", "text_answer": "Giai đoạn Phản ứng xuất phát từ nỗi sợ và kỳ vọng bên ngoài; giai đoạn Sáng tạo phát xuất từ giá trị sâu sắc bên trong để tạo tác động lâu dài.", "image_url": "Câu 8.jpg", "reflection": "\"Tôi sống để người mù có cơ hội tiếp cận tri thức\" – Nguyễn Hướng Dương.", "icon": "🌱"}, {"id": "Câu 9", "question": "Bạn có dũng cảm nhìn vào những \"mảnh ghép\" chưa hoàn hảo của mình?", "text_answer": "Chấp nhận mình là một thực thể bất toàn, dũng cảm trung thực nhìn nhận cả ưu và khuyết điểm để bắt đầu sự chuyển hóa thực sự.", "image_url": "Câu 9.jpg", "reflection": "\"Khi tôi chấp nhận chính mình, tôi được giải thoát khỏi gánh nặng của việc cần bạn chấp nhận tôi\" – Steve Maraboli.", "icon": "🧩"}, {"id": "Câu 10", "question": "Bạn có dám nói điều cần nói ngay cả khi nó không hề dễ dàng?", "text_answer": "Dũng cảm sống thật bằng việc: Thấy và biết điều đúng + Dám hành động dấn thân + Thực hiện một cách có trách nhiệm.", "image_url": "Câu 10.jpeg", "reflection": "\"Việc được là chính mình trong một thế giới luôn muốn biến bạn thành người khác là thành tựu lớn nhất\" – Ralph Waldo Emerson.", "icon": "🗣️"}];
+        const flashcards = [{"id": "Câu 1", "question": "Lãnh đạo là gì?", "text_answer": "Lãnh đạo = Trách nhiệm + Ảnh hưởng + Mục tiêu.", "image_url": "Câu 1.png", "reflection": "Ai là người đã tạo ảnh hưởng lớn nhất đến phong cách lãnh đạo của bạn hiện nay?", "icon": "🎯"}, {"id": "Câu 2", "question": "Nêu tên 5 Giai đoạn Phát triển Lãnh đạo", "text_answer": "Vị kỷ &rarr; Phản ứng &rarr; Sáng tạo &rarr; Tích hợp &rarr; Nhất thể.", "image_url": "Câu 2.png", "reflection": "\"Hành trình phát triển lãnh đạo là hành trình giảm trừ Tự ngã, mở rộng Tâm lượng và Tầm nhìn.\"", "icon": "📈"}, {"id": "Câu 3", "question": "Cách tư duy của Lãnh đạo Phản ứng là như thế nào?", "text_answer": "Bị chi phối bởi nỗi sợ, tập trung vào việc bảo vệ an toàn, giảm thiểu rủi ro và đối phó tình huống.", "image_url": "Câu 3.png", "reflection": "Khi đối diện với áp lực, nỗi sợ, bạn thường có xu hướng phản ứng như thế nào?", "icon": "⚡"}, {"id": "Câu 4", "question": "Cách tư duy của Lãnh đạo Sáng tạo là như thế nào?", "text_answer": "Được dẫn dắt bởi mục đích, tầm nhìn, ý nghĩa, vượt lên khỏi cái tôi.", "image_url": "Câu 4.png", "reflection": "Bạn mong muốn đóng góp/ tạo ra giá trị gì cho tổ chức và cộng đồng?", "icon": "💡"}, {"id": "Câu 5", "question": "Một người lãnh đạo cần quan tâm đến những phương diện nào?", "text_answer": "Tôi hiện diện thế nào (Being) - Tôi kết nối ra sao (Relating) - Tôi đạt mục tiêu bằng cách nào (Achieving).", "image_url": "Câu 5.png", "reflection": "“Lãnh đạo không chỉ là đạt mục tiêu, mà là hiện diện vững vàng và kết nối để nâng tầm người khác.”", "icon": "🌐"}, {"id": "Câu 6", "question": "Điều gì sẽ xảy ra khi cái tôi (Tự ngã) dần lùi lại phía sau?", "text_answer": "Khi Tự ngã giảm dần, thì Tâm lượng và Tầm nhìn sẽ tăng lên tương ứng.", "image_url": "Câu 6.png", "reflection": "\"Con đường phát triển lãnh đạo chính là hành trình phá trừ cái tôi để phụng sự toàn thể với tình thương và trí tuệ chân thật.\"", "icon": "🧘"}, {"id": "Câu 7", "question": "Điều gì mang lại ý nghĩa và định hướng cho cách bạn sống và dẫn dắt?", "text_answer": "Mục đích sống là kim chỉ nam giúp bạn vượt qua nỗi sợ để hướng tới những giá trị cao đẹp hơn.", "image_url": "Câu 7.jpeg", "reflection": "\"He who has a why to live for can bear almost any how\" – Friedrich Nietzsche.", "icon": "🧭"}, {"id": "Câu 8", "question": "Mục đích của bạn đến từ giá trị bên trong hay kỳ vọng bên ngoài?", "answer_label": "Phân biệt động lực:", "image_url": "Câu 8.png", "reflection": "\"Tôi sống để người mù có cơ hội tiếp cận tri thức\" – Nguyễn Hướng Dương.", "icon": "🌱"}, {"id": "Câu 9", "question": "Bạn cảm thấy thế nào khi đối diện với những góc tối của bản thân?", "text_answer": "Chấp nhận mình là một thực thể bất toàn, trung thực nhìn nhận cả ưu và khuyết điểm để bắt đầu sự thay đổi.", "image_url": "Câu 9.jpg", "reflection": "\"Khi tôi chấp nhận chính mình, tôi được giải thoát khỏi gánh nặng của việc cần bạn chấp nhận tôi\" – Steve Maraboli.", "icon": "🧩"}, {"id": "Câu 10", "question": "Bạn có dám nói điều cần nói ngay cả khi nó không hề dễ dàng?", "text_answer": "Dũng cảm sống thật = Biết điều đúng + Dám hành động + Một cách có trách nhiệm.", "image_url": "Câu 10.jpeg", "reflection": "\"Việc được là chính mình trong một thế giới luôn muốn biến bạn thành người khác là thành tựu lớn nhất\" – Ralph Waldo Emerson.", "icon": "🗣️"}];
 
         let currentIndex = 0;
 
